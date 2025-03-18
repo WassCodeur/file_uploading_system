@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import FastAPI, Form, Request, UploadFile, templating
+from fastapi import FastAPI, Form, Request, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 import os
