@@ -27,26 +27,29 @@ def create_item(item):
 
 @app.post("/files/")
 async def upload_file(file: UploadFile):
-    # return {"file_size": len(file)}
-    save_path = os.path.join(os.path.dirname(__file__), "image", file.filename)
-    root = os.path.join(os.path.dirname(__file__), "image")
-    if not os.path.exists(root):
-        os.mkdir(root)
+    # Utiliser le répertoire /tmp pour Vercel
+    save_path = os.path.join("/tmp", file.filename)
 
     with open(save_path, "wb") as f:
         f.write(file.file.read())
 
-    with open(data, "r") as f:
-        images = json.loads(f.read())
-        images.append({"url": file.filename})
+    # Pour la persistance des données, vous devrez utiliser un service de stockage externe
+    # comme AWS S3, Google Cloud Storage, ou similaire
 
-    with open(data, "w") as f:
-        f.write(json.dumps(images))
+    # Mise à jour de votre data.json (ceci peut également échouer sur Vercel)
+    try:
+        with open(data, "r") as f:
+            images = json.loads(f.read())
+            images.append({"url": file.filename})
+
+        with open(data, "w") as f:
+            f.write(json.dumps(images))
+    except Exception as e:
+        return {"error": str(e)}
 
     return {
         "filename": file.filename,
         "save_path": save_path,
-        "root": root,
         "size": file.size,
         "images": images,
     }
