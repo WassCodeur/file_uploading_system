@@ -17,7 +17,7 @@ images = []
 
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):
-    return templates.TemplateResponse(request=request, name="index.html")
+    return templates.TemplateResponse(name="index.html", context={"request": request})
 
 
 @app.post("/items/")
